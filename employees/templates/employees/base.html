@@ -1,0 +1,183 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Company Management</title>
+    <div class="topbar-right">
+    <span style="color:#6b6480;font-size:13px;">👤 {{ request.user.username }}</span>
+    <a href="{% url 'logout' %}" class="btn btn-light" style="padding:5px 14px;font-size:12px;">Logout</a>
+</div>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+     
+         .sidebar {
+            position: fixed; top: 0; left: 0;
+            width: 220px; height: 100vh;
+            background: #1a1a2e; z-index: 100;
+        }
+        .sidebar-brand {
+            padding: 20px 18px; color: white;
+            font-size: 17px; font-weight: 700;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            display: flex; align-items: center; gap: 10px;
+        }
+        .sidebar-section {
+            padding: 16px 18px 6px;
+            font-size: 10px; color: rgba(255,255,255,0.3);
+            letter-spacing: 1.5px; text-transform: uppercase;
+        }
+        .sidebar nav a {
+            display: flex; align-items: center; gap: 10px;
+            padding: 12px 18px; color: rgba(255,255,255,0.65);
+            text-decoration: none; font-size: 13px;
+            border-left: 3px solid transparent; transition: all 0.2s;
+        }
+        .sidebar nav a:hover, .sidebar nav a.active {
+            color: white; background: rgba(255,255,255,0.08);
+            border-left: 3px solid #e94560;
+        }
+
+        .main { margin-left: 220px; min-height: 100vh; padding: 20px 24px; }
+
+        .topbar {
+            background: white; padding: 13px 20px;
+            border-radius: 10px; box-shadow: 0 1px 6px rgba(0,0,0,0.07);
+            margin-bottom: 20px; display: flex;
+            justify-content: space-between; align-items: center;
+        }
+        .topbar h4 { font-size: 16px; font-weight: 600; color: #1a1a2e; }
+        .topbar-right { color: #888; font-size: 13px; }
+
+        .card { background: white; border-radius: 10px; box-shadow: 0 1px 6px rgba(0,0,0,0.07); overflow: hidden; }
+        .card-header {
+            padding: 14px 18px; border-bottom: 1px solid #f0f2f5;
+            display: flex; justify-content: space-between; align-items: center;
+            font-weight: 600; font-size: 14px; color: #1a1a2e;
+        }
+        .card-body { padding: 20px; }
+
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 14px; margin-bottom: 20px; }
+        .stat-card {
+            background: white; border-radius: 10px; padding: 16px 18px;
+            box-shadow: 0 1px 6px rgba(0,0,0,0.07); border-left: 4px solid;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .stat-card.blue  { border-left-color: #4361ee; }
+        .stat-card.green { border-left-color: #2dc653; }
+        .stat-info label { font-size: 11px; color: #999; display: block; margin-bottom: 3px; }
+        .stat-info h3 { font-size: 24px; font-weight: 700; color: #1a1a2e; }
+        .stat-icon { width: 42px; height: 42px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+        .stat-icon.blue  { background: #eef0fd; }
+        .stat-icon.green { background: #e8faea; }
+
+        /* TABLE - overflow scroll fix */
+        .table-wrap { overflow-x: auto; width: 100%; }
+
+        table { width: 100%; border-collapse: collapse; min-width: 700px; }
+        thead th {
+            background: #f8f9fa; padding: 11px 13px;
+            font-size: 11px; font-weight: 600;
+            text-transform: uppercase; letter-spacing: 0.5px;
+            color: #999; text-align: left; border-bottom: 1px solid #f0f2f5;
+            white-space: nowrap;
+        }
+        tbody td {
+            padding: 11px 13px; font-size: 13px;
+            border-bottom: 1px solid #f8f9fa; color: #444;
+            white-space: nowrap;
+        }
+        tbody tr:hover { background: #fafbff; }
+        tbody tr:last-child td { border-bottom: none; }
+
+        .avatar {
+            width: 30px; height: 30px; border-radius: 50%;
+            background: #eef0fd; color: #4361ee;
+            font-weight: 700; font-size: 12px;
+            display: inline-flex; align-items: center;
+            justify-content: center; margin-right: 6px;
+            vertical-align: middle;
+        }
+        .name-cell { display: flex; align-items: center; }
+
+        .badge { padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 500; }
+        .badge-id   { background: #eef0fd; color: #4361ee; }
+        .badge-dept { background: #e8faea; color: #1a7a36; }
+
+        .btn {
+            padding: 7px 16px; border-radius: 8px; border: none;
+            cursor: pointer; font-size: 13px; font-weight: 500;
+            text-decoration: none; display: inline-flex;
+            align-items: center; gap: 5px; transition: all 0.2s;
+        }
+        .btn-primary { background: #4361ee; color: white; }
+        .btn-primary:hover { background: #3451d1; }
+        .btn-light { background: #f0f2f5; color: #555; }
+        .btn-light:hover { background: #e2e5ea; }
+        .btn-danger { background: #e63946; color: white; }
+        .btn-danger:hover { background: #c1121f; }
+
+        .btn-icon {
+            width: 28px; height: 28px; border-radius: 7px; border: none;
+            cursor: pointer; display: inline-flex; align-items: center;
+            justify-content: center; font-size: 13px;
+            text-decoration: none; transition: all 0.2s; margin-right: 4px;
+        }
+        .btn-edit { background: #fff3cd; color: #d48806; }
+        .btn-edit:hover { background: #ffe69c; }
+        .btn-del  { background: #fde8ea; color: #e63946; }
+        .btn-del:hover { background: #ffc9cd; }
+
+        .form-card { max-width: 580px; margin: 0 auto; }
+        .form-group { margin-bottom: 16px; }
+        .form-group label { display: block; font-size: 12px; font-weight: 500; color: #666; margin-bottom: 5px; }
+        .form-group input, .form-group select {
+            width: 100%; padding: 9px 13px;
+            border: 1.5px solid #e0e0e0; border-radius: 8px;
+            font-size: 13px; color: #333; outline: none;
+            transition: border 0.2s; font-family: 'Segoe UI', sans-serif;
+        }
+        .form-group input:focus, .form-group select:focus {
+            border-color: #4361ee;
+            box-shadow: 0 0 0 3px rgba(67,97,238,0.08);
+        }
+        .form-actions { display: flex; gap: 10px; margin-top: 20px; }
+
+        .empty-state { text-align: center; padding: 40px 20px; color: #bbb; }
+        .empty-icon { font-size: 40px; margin-bottom: 10px; }
+
+        .delete-box { max-width: 400px; margin: 50px auto; text-align: center; }
+        .delete-icon { width: 65px; height: 65px; background: #fff3cd; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 26px; margin: 0 auto 18px; } 
+    </style>
+</head>
+<body>
+
+<div class="sidebar">
+    <div class="sidebar-brand">🏢 CompanyMS</div>
+    <div class="sidebar-section">Menu</div>
+    <div class="topbar-right">
+    <!-- <a href="{% url 'logout' %}" class="btn btn-light">
+        Logout
+    </a> -->
+</div>
+    <nav>
+        <a href="{% url 'dashboard' %}">🏠 Dashboard</a>
+        <a href="{% url 'employee_list' %}">👥 Employees</a>
+        <a href="{% url 'department_list' %}">🏬 Departments</a>
+        <a href="{% url 'attendance_page' %}">📅 Attendance</a>
+        <a href="{% url 'payroll_list' %}">💰 Payroll</a>
+        <a href="{% url 'leave_list' %}">🏖️ Leave</a>
+        <a href="{% url 'reports' %}">📊 Reports</a>
+    </nav>
+</div>
+
+<div class="main">
+    <div class="topbar">
+        <h4>{% block page_title %}Dashboard{% endblock %}</h4>
+        <div class="topbar-right">👤 Admin</div>
+    </div>
+    {% block content %}{% endblock %}
+</div>
+
+</body>
+</html>

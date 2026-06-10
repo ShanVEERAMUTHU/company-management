@@ -1,0 +1,70 @@
+﻿{% extends "employees/base.html" %}
+{% block page_title %}Payslip{% endblock %}
+{% block content %}
+<div style="max-width:650px;margin:0 auto;">
+    <div class="card">
+        <div class="card-header" style="background:#2d2640;">
+            <span>🧾 Payslip — {{ payroll.employee.name }}</span>
+            <a href="{% url 'payroll_list' %}" class="btn btn-light" style="padding:4px 12px;font-size:12px;">Back</a>
+        </div>
+        <div class="card-body">
+            <div style="display:flex;justify-content:space-between;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid #2d2640;">
+                <div>
+                    <div style="font-size:20px;font-weight:700;color:#e2dff8;">{{ payroll.employee.name }}</div>
+                    <div style="color:#6b6480;font-size:13px;">{{ payroll.employee.department }}</div>
+                    <div style="color:#6b6480;font-size:13px;">{{ payroll.employee.Emp_id }}</div>
+                </div>
+                <div style="text-align:right;">
+                    <div style="font-size:13px;color:#6b6480;">Pay Period</div>
+                    <div style="font-size:16px;font-weight:600;color:#afa9ec;">{{ payroll.month }}/{{ payroll.year }}</div>
+                    <div style="margin-top:6px;">
+                        {% if payroll.is_paid %}
+                        <span class="badge" style="background:#0f2e26;color:#5dcaa5;">✓ Paid on {{ payroll.paid_date }}</span>
+                        {% else %}
+                        <span class="badge" style="background:#2e1212;color:#e24b4a;">Unpaid</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+                <div>
+                    <div style="font-size:12px;font-weight:600;color:#4a4268;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;">Earnings</div>
+                    <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #2d2640;">
+                        <span style="color:#9d96b8;">Basic Salary</span>
+                        <span style="color:#e2dff8;">Rs.{{ payroll.basic_salary }}</span>
+                    </div>
+                    <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #2d2640;">
+                        <span style="color:#9d96b8;">HRA</span>
+                        <span style="color:#e2dff8;">Rs.{{ payroll.hra }}</span>
+                    </div>
+                    <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #2d2640;">
+                        <span style="color:#9d96b8;">Allowances</span>
+                        <span style="color:#e2dff8;">Rs.{{ payroll.allowances }}</span>
+                    </div>
+                </div>
+                <div>
+                    <div style="font-size:12px;font-weight:600;color:#4a4268;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;">Deductions</div>
+                    <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #2d2640;">
+                        <span style="color:#9d96b8;">PF</span>
+                        <span style="color:#e24b4a;">-Rs.{{ payroll.pf_deduction }}</span>
+                    </div>
+                    <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #2d2640;">
+                        <span style="color:#9d96b8;">Tax</span>
+                        <span style="color:#e24b4a;">-Rs.{{ payroll.tax_deduction }}</span>
+                    </div>
+                    <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #2d2640;">
+                        <span style="color:#9d96b8;">Other</span>
+                        <span style="color:#e24b4a;">-Rs.{{ payroll.other_deductions }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top:20px;padding:16px;background:#2d2640;border-radius:10px;display:flex;justify-content:space-between;align-items:center;">
+                <span style="font-size:15px;font-weight:600;color:#e2dff8;">Net Salary</span>
+                <span style="font-size:24px;font-weight:700;color:#5dcaa5;">Rs.{{ payroll.net_salary }}</span>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

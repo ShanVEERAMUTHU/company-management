@@ -1,0 +1,65 @@
+﻿{% extends "employees/base.html" %}
+{% block page_title %}Generate Payroll{% endblock %}
+{% block content %}
+<div class="form-card">
+    <div class="card">
+        <div class="card-header">💰 Generate Payroll</div>
+        <div class="card-body">
+            <form method="POST">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label>Employee</label>
+                    <select name="employee" required>
+                        <option value="">-- Select Employee --</option>
+                        {% for e in employees %}
+                        <option value="{{ e.id }}">{{ e.name }} (Rs.{{ e.salary }})</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+                    <div class="form-group">
+                        <label>Month (1-12)</label>
+                        <input type="number" name="month" min="1" max="12" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Year</label>
+                        <input type="number" name="year" value="2026" required>
+                    </div>
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;">
+                    <div class="form-group">
+                        <label>Basic Salary</label>
+                        <input type="number" name="basic_salary" step="0.01" required>
+                    </div>
+                    <div class="form-group">
+                        <label>HRA</label>
+                        <input type="number" name="hra" step="0.01" value="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Allowances</label>
+                        <input type="number" name="allowances" step="0.01" value="0">
+                    </div>
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;">
+                    <div class="form-group">
+                        <label>PF Deduction</label>
+                        <input type="number" name="pf_deduction" step="0.01" value="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Tax Deduction</label>
+                        <input type="number" name="tax_deduction" step="0.01" value="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Other Deductions</label>
+                        <input type="number" name="other_deductions" step="0.01" value="0">
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Generate Payroll</button>
+                    <a href="{% url 'payroll_list' %}" class="btn btn-light">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

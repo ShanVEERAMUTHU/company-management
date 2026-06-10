@@ -1,0 +1,113 @@
+﻿{% extends "employees/base.html" %}
+{% block page_title %}Reports{% endblock %}
+{% block content %}
+
+<div style="margin-bottom:6px;color:#6b6480;font-size:13px;">{{ month_name }} — All Reports</div>
+
+<!-- Employee Report -->
+<div style="margin-bottom:8px;font-size:12px;font-weight:600;color:#4a4268;text-transform:uppercase;letter-spacing:0.5px;">Employee Report</div>
+<div class="stats-grid" style="margin-bottom:20px;">
+    <div class="stat-card blue">
+        <div class="stat-info"><label>Total Employees</label><h3>{{ total_employees }}</h3></div>
+        <div class="stat-icon blue">👥</div>
+    </div>
+    <div class="stat-card green">
+        <div class="stat-info"><label>Total Salary Expense</label><h3 style="font-size:18px;">Rs.{{  total_salary|floatformat:2  }}</h3></div>
+        <div class="stat-icon green">💰</div>
+    </div>
+</div>
+
+<div class="card" style="margin-bottom:24px;">
+    <div class="card-header">👥 Department Wise Employees</div>
+    <div class="table-wrap">
+        <table>
+            <thead><tr><th>Department</th><th>Employee Count</th></tr></thead>
+            <tbody>
+                {% for dept, count in dept_wise.items %}
+                <tr>
+                    <td><span class="badge badge-dept">{{ dept }}</span></td>
+                    <td><span class="badge badge-id">{{ count }} employees</span></td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="2"><div class="empty-state"><div class="empty-icon">📭</div><p>No data</p></div></td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Attendance Report -->
+<div style="margin-bottom:8px;font-size:12px;font-weight:600;color:#4a4268;text-transform:uppercase;letter-spacing:0.5px;">Attendance Report — {{ month_name }}</div>
+<div class="stats-grid" style="margin-bottom:24px;">
+    <div class="stat-card green">
+        <div class="stat-info"><label>Present</label><h3>{{ total_present }}</h3></div>
+        <div class="stat-icon green">✅</div>
+    </div>
+    <div class="stat-card red">
+        <div class="stat-info"><label>Absent</label><h3>{{ total_absent }}</h3></div>
+        <div class="stat-icon red">❌</div>
+    </div>
+    <div class="stat-card orange">
+        <div class="stat-info"><label>Half Day</label><h3>{{ total_halfday }}</h3></div>
+        <div class="stat-icon orange">🕐</div>
+    </div>
+</div>
+
+<!-- Payroll Report -->
+<div style="margin-bottom:8px;font-size:12px;font-weight:600;color:#4a4268;text-transform:uppercase;letter-spacing:0.5px;">Payroll Report — {{ month_name }}</div>
+<div class="stats-grid" style="margin-bottom:24px;">
+    <div class="stat-card blue">
+        <div class="stat-info"><label>Total Payout</label><h3 style="font-size:18px;">Rs.{{ total_payroll }}</h3></div>
+        <div class="stat-icon blue">💰</div>
+    </div>
+    <div class="stat-card green">
+        <div class="stat-info"><label>Paid</label><h3>{{ paid_count }}</h3></div>
+        <div class="stat-icon green">✅</div>
+    </div>
+    <div class="stat-card red">
+        <div class="stat-info"><label>Unpaid</label><h3>{{ unpaid_count }}</h3></div>
+        <div class="stat-icon red">⏳</div>
+    </div>
+</div>
+
+<!-- Leave Report -->
+<div style="margin-bottom:8px;font-size:12px;font-weight:600;color:#4a4268;text-transform:uppercase;letter-spacing:0.5px;">Leave Report</div>
+<div class="stats-grid" style="margin-bottom:20px;">
+    <div class="stat-card blue">
+        <div class="stat-info"><label>Total Requests</label><h3>{{ total_leaves }}</h3></div>
+        <div class="stat-icon blue">📋</div>
+    </div>
+    <div class="stat-card orange">
+        <div class="stat-info"><label>Pending</label><h3>{{ pending_leaves }}</h3></div>
+        <div class="stat-icon orange">⏳</div>
+    </div>
+    <div class="stat-card green">
+        <div class="stat-info"><label>Approved</label><h3>{{ approved_leaves }}</h3></div>
+        <div class="stat-icon green">✅</div>
+    </div>
+    <div class="stat-card red">
+        <div class="stat-info"><label>Rejected</label><h3>{{ rejected_leaves }}</h3></div>
+        <div class="stat-icon red">❌</div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">🏖️ Leave Type Wise</div>
+    <div class="table-wrap">
+        <table>
+            <thead><tr><th>Leave Type</th><th>Count</th></tr></thead>
+            <tbody>
+                {% for lt, count in leave_type_wise.items %}
+                <tr>
+                    <td><span class="badge badge-id">{{ lt }}</span></td>
+                    <td><span class="badge" style="background:#2d2640;color:#afa9ec;">{{ count }}</span></td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="2"><div class="empty-state"><div class="empty-icon">📭</div><p>No data</p></div></td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

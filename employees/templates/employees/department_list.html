@@ -1,0 +1,65 @@
+﻿{% extends "employees/base.html" %}
+{% block page_title %}Departments{% endblock %}
+{% block content %}
+
+<div class="stats-grid">
+    <div class="stat-card blue">
+        <div class="stat-info">
+            <label>Total Departments</label>
+            <h3>{{ departments.count }}</h3>
+        </div>
+        <div class="stat-icon blue">🏬</div>
+    </div>
+    <div class="stat-card green">
+        <div class="stat-info">
+            <label>Total Employees</label>
+            <h3>{{ departments.count }}</h3>
+        </div>
+        <div class="stat-icon green">👥</div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        🏬 Department List
+        <a href="{% url 'add_department' %}" class="btn btn-primary">+ Add Department</a>
+    </div>
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Dept ID</th>
+                    <th>Department Name</th>
+                    <th>Manager</th>
+                    <th>Location</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for dept in departments %}
+                <tr>
+                    <td><span class="badge badge-id">{{ dept.dept_id }}</span></td>
+                    <td><strong style="color:#e2dff8;">{{ dept.dept_name }}</strong></td>
+                    <td style="color:#9d96b8;">{{ dept.manager_name }}</td>
+                    <td style="color:#9d96b8;">{{ dept.location }}</td>
+                    <td>
+                        <a href="{% url 'update_department' dept.dept_id %}" class="btn-icon btn-edit" title="Edit">✏️</a>
+                        <a href="{% url 'delete_department' dept.dept_id %}" class="btn-icon btn-del" title="Delete">🗑️</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5">
+                        <div class="empty-state">
+                            <div class="empty-icon">📭</div>
+                            <p>No departments found</p>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

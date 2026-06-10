@@ -1,0 +1,74 @@
+﻿{% extends "employees/base.html" %}
+{% block page_title %}Leave Management{% endblock %}
+{% block content %}
+
+<div class="stats-grid">
+    <div class="stat-card blue">
+        <div class="stat-info"><label>Total Requests</label><h3>{{ leaves.count }}</h3></div>
+        <div class="stat-icon blue">📋</div>
+    </div>
+    <div class="stat-card orange">
+        <div class="stat-info"><label>Pending</label><h3>{{ pending }}</h3></div>
+        <div class="stat-icon orange">⏳</div>
+    </div>
+    <div class="stat-card green">
+        <div class="stat-info"><label>Approved</label><h3>{{ approved }}</h3></div>
+        <div class="stat-icon green">✅</div>
+    </div>
+    <div class="stat-card red">
+        <div class="stat-info"><label>Rejected</label><h3>{{ rejected }}</h3></div>
+        <div class="stat-icon red">❌</div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        📋 Leave Requests
+        <div style="display:flex;gap:8px;">
+            <a href="{% url 'leave_balance' %}" class="btn btn-light">📊 Leave Balance</a>
+            <a href="{% url 'apply_leave' %}" class="btn btn-primary">+ Apply Leave</a>
+        </div>
+    </div>
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Employee</th>
+                    <th>Leave Type</th>
+                    <th>From</th>
+                    <th>To</th>
+                    <th>Days</th>
+                    <th>Reason</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for leave in leaves %}
+                <tr>
+                    <td>{% if leave.employee.photo %}<img src="{{ leave.employee.photo.url }}" style="width:28px;height:28px;border-radius:50%;object-fit:cover;margin-right:6px;vertical-align:middle;">{% else %}<span class="avatar">{{ leave.employee.name|first|upper }}</span>{% endif %} {{ leave.employee.name }}</td>
+                    <td><span class="badge badge-id">{{ leave.leave_type }}</span></td>
+                    <td style="color:#9d96b8;">{{ leave.from_date }}</td>
+                    <td style="color:#9d96b8;">{{ leave.to_date }}</td>
+                    <td><span class="badge" style="background:#2d2640;color:#afa9ec;">{{ leave.total_days }} days</span></td>
+                    <td style="color:#9d96b8;max-width:150px;overflow:hidden;text-overflow:ellipsis;">{{ leave.reason }}</td>
+                    <td>
+                        {% if leave.status == "Approved" %}<span class="badge" style="background:#0f2e26;color:#5dcaa5;">✓ Approved</span>
+                        {% elif leave.status == "Rejected" %}<span class="badge" style="background:#2e1212;color:#e24b4a;">✗ Rejected</span>
+                        {% else %}<span class="badge" style="background:#2e2410;color:#ef9f27;">⏳ Pending</span>{% endif %}
+                    </td>
+                    <td>
+                        {% if leave.status == "Pending" %}
+                        <a href="{% url 'approve_leave' leave.id %}" class="btn btn-primary" style="padding:4px 10px;font-size:11px;">Approve</a>
+                        <a href="{% url 'reject_leave' leave.id %}" class="btn-icon btn-del" style="margin-left:4px;">✗</a>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="8"><div class="empty-state"><div class="empty-icon">📭</div><p>No leave requests</p></div></td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

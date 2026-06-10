@@ -1,0 +1,70 @@
+﻿{% extends "employees/base.html" %}
+{% block page_title %}Payroll{% endblock %}
+{% block content %}
+
+<div class="stats-grid">
+    <div class="stat-card blue">
+        <div class="stat-info"><label>Total Records</label><h3>{{ payrolls.count }}</h3></div>
+        <div class="stat-icon blue">💰</div>
+    </div>
+    <div class="stat-card green">
+        <div class="stat-info"><label>Paid</label><h3>{{ payrolls|length }}</h3></div>
+        <div class="stat-icon green">✅</div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        💰 Payroll List
+        <a href="{% url 'add_payroll' %}" class="btn btn-primary">+ Generate Payroll</a>
+    </div>
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Employee</th>
+                    <th>Month/Year</th>
+                    <th>Basic</th>
+                    <th>HRA</th>
+                    <th>Allowances</th>
+                    <th>PF</th>
+                    <th>Tax</th>
+                    <th>Net Salary</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in payrolls %}
+                <tr>
+                    <td>{% if p.employee.photo %}<img src="{{ p.employee.photo.url }}" style="width:28px;height:28px;border-radius:50%;object-fit:cover;margin-right:6px;vertical-align:middle;">{% else %}<span class="avatar">{{ p.employee.name|first|upper }}</span>{% endif %} {{ p.employee.name }}</td>
+                    <td><span class="badge badge-id">{{ p.month }}/{{ p.year }}</span></td>
+                    <td style="color:#9d96b8;">Rs.{{ p.basic_salary }}</td>
+                    <td style="color:#9d96b8;">Rs.{{ p.hra }}</td>
+                    <td style="color:#9d96b8;">Rs.{{ p.allowances }}</td>
+                    <td style="color:#e24b4a;">-Rs.{{ p.pf_deduction }}</td>
+                    <td style="color:#e24b4a;">-Rs.{{ p.tax_deduction }}</td>
+                    <td><strong style="color:#5dcaa5;">Rs.{{ p.net_salary }}</strong></td>
+                    <td>
+                        {% if p.is_paid %}
+                            <span class="badge" style="background:#0f2e26;color:#5dcaa5;">Paid</span>
+                        {% else %}
+                            <span class="badge" style="background:#2e1212;color:#e24b4a;">Unpaid</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if not p.is_paid %}
+                        <a href="{% url 'mark_paid' p.id %}" class="btn btn-primary" style="padding:4px 10px;font-size:11px;">Mark Paid</a>
+                        {% endif %}
+                        <a href="{% url 'payslip' p.id %}" class="btn btn-light" style="padding:4px 10px;font-size:11px;">Payslip</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="10"><div class="empty-state"><div class="empty-icon">📭</div><p>No payroll records found</p></div></td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

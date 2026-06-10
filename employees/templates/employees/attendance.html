@@ -1,0 +1,115 @@
+﻿{% extends "employees/base.html" %}
+{% block page_title %}Attendance{% endblock %}
+{% block content %}
+
+<div class="stats-grid">
+    <div class="stat-card blue">
+        <div class="stat-info"><label>Total Records</label><h3>{{ attendances.count }}</h3></div>
+        <div class="stat-icon blue">📋</div>
+    </div>
+    <div class="stat-card green">
+        <div class="stat-info"><label>Total Employees</label><h3>{{ employees.count }}</h3></div>
+        <div class="stat-icon green">👥</div>
+    </div>
+</div>
+
+<div class="card" style="margin-bottom:20px;">
+    <div class="card-header">➕ Add Attendance</div>
+    <div class="card-body">
+        <form method="POST">
+            {% csrf_token %}
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr 1fr;gap:14px;align-items:end;">
+                <div class="form-group" style="margin-bottom:0;">
+                    <label>Employee</label>
+                    <select name="employee" required>
+                        <option value="">-- Select --</option>
+                        {% for e in employees %}
+                        <option value="{{ e.id }}">{{ e.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group" style="margin-bottom:0;">
+                    <label>Date</label>
+                    <input type="date" name="date" value="{{ today }}" required>
+                </div>
+                <div class="form-group" style="margin-bottom:0;">
+                    <label>Status</label>
+                    <select name="status" required>
+                        <option value="Present">Present</option>
+                        <option value="Absent">Absent</option>
+                        <option value="Half Day">Half Day</option>
+                    </select>
+                </div>
+                <div class="form-group" style="margin-bottom:0;">
+                    <label>Check In</label>
+                    <input type="time" name="check_in">
+                </div>
+                <div class="form-group" style="margin-bottom:0;">
+                    <label>Check Out</label>
+                    <input type="time" name="check_out">
+                </div>
+            </div>
+            <div style="margin-top:16px;">
+                <button type="submit" class="btn btn-primary">Save Attendance</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="card" style="margin-bottom:20px;">
+    <div class="card-header">📊 Monthly Report — {{ month_name }}</div>
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Employee</th>
+                    <th>Department</th>
+                    <th>Present</th>
+                    <th>Half Day</th>
+                    <th>Absent</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for m in monthly %}
+                <tr>
+                    <td>{% if m.employee.photo %}<img src="{{ m.employee.photo.url }}" style="width:28px;height:28px;border-radius:50%;object-fit:cover;margin-right:6px;vertical-align:middle;">{% else %}<span class="avatar">{{ m.employee.name|first|upper }}</span>{% endif %} {{ m.employee.name }}</td>
+                    <td><span class="badge badge-dept">{{ m.employee.department }}</span></td>
+                    <td><span class="badge" style="background:#0f2e26;color:#5dcaa5;">{{ m.present }}</span></td>
+                    <td><span class="badge" style="background:#2e2410;color:#ef9f27;">{{ m.half_day }}</span></td>
+                    <td><span class="badge" style="background:#2e1212;color:#e24b4a;">{{ m.absent }}</span></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">📋 Attendance Records</div>
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr><th>Employee</th><th>Date</th><th>Check In</th><th>Check Out</th><th>Status</th></tr>
+            </thead>
+            <tbody>
+                {% for a in attendances %}
+                <tr>
+                    <td>{% if a.employee.photo %}<img src="{{ a.employee.photo.url }}" style="width:28px;height:28px;border-radius:50%;object-fit:cover;margin-right:6px;vertical-align:middle;">{% else %}<span class="avatar">{{ a.employee.name|first|upper }}</span>{% endif %} {{ a.employee.name }}</td>
+                    <td>{{ a.date }}</td>
+                    <td>{% if a.check_in %}<span style="color:#1d9e75;">{{ a.check_in|time:"H:i" }}</span>{% else %}<span style="color:#3d3654;">-</span>{% endif %}</td>
+                    <td>{% if a.check_out %}<span style="color:#ef9f27;">{{ a.check_out|time:"H:i" }}</span>{% else %}<span style="color:#3d3654;">-</span>{% endif %}</td>
+                    <td>
+                        {% if a.status == "Present" %}<span class="badge" style="background:#0f2e26;color:#5dcaa5;">Present</span>
+                        {% elif a.status == "Half Day" %}<span class="badge" style="background:#2e2410;color:#ef9f27;">Half Day</span>
+                        {% else %}<span class="badge" style="background:#2e1212;color:#e24b4a;">Absent</span>{% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="5"><div class="empty-state"><div class="empty-icon">📭</div><p>No records found</p></div></td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

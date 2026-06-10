@@ -1,0 +1,78 @@
+{% extends 'employees/base.html' %}
+{% block page_title %}Add Employee{% endblock %}
+
+{% block content %}
+<div class="form-card">
+    <div class="card">
+        <div class="card-header">
+            Add New Employee
+        </div>
+        <div class="card-body">
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label>Employee ID</label>
+                    <input type="text" name="Emp_id" placeholder="e.g. 101" required>
+                </div>
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" name="name" placeholder="Enter full name" required>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" name="email" placeholder="example@email.com" required>
+                </div>
+                <div class="form-group">
+                    <label>Phone</label>
+                    <input type="text" name="phone" placeholder="Enter phone number" required>
+                </div>
+                <div class="form-group">
+                    <label>Department</label>
+                    <input type="text" name="department" placeholder="e.g. HR, IT, Sales" required>
+                </div>
+                <div class="form-group">
+                    <label>Salary</label>
+                    <input type="number" name="salary" placeholder="Enter salary" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label>Joining Date</label>
+                    <input type="date" name="joining_date" required>
+                </div>
+                <div class="form-group">
+                    <label>Photo</label>
+                    <input type="file" name="photo" accept="image/*">
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Add Employee</button>
+                    <a href="{% url 'employee_list' %}" class="btn btn-light">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+
+
+<!-- <h2>Add Employee</h2>
+
+<form method="post">
+    {% csrf_token %}
+
+    <input type="text" name="Emp_id" placeholder="Emp_id"><br><br>
+
+    <input type="text" name="name" placeholder="Name"><br><br>
+
+    <input type="email" name="email" placeholder="Email"><br><br>
+
+    <input type="text" name="phone" placeholder="Phone"><br><br>
+
+    <input type="text" name="department" placeholder="Department"><br><br>
+
+    <input type="number" name="salary" placeholder="Salary"><br><br>
+
+    <input type="date" name="joining_date"><br><br>
+
+    <button type="submit">Save</button>
+</form> -->

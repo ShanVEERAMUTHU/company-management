@@ -1,0 +1,49 @@
+﻿{% extends "employees/base.html" %}
+{% block page_title %}Leave Balance{% endblock %}
+{% block content %}
+
+<div class="card">
+    <div class="card-header">
+        📊 Leave Balance — All Employees
+        <a href="{% url 'leave_list' %}" class="btn btn-light">Back</a>
+    </div>
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Employee</th>
+                    <th>Dept</th>
+                    <th>Sick Used</th>
+                    <th>Sick Balance</th>
+                    <th>Casual Used</th>
+                    <th>Casual Balance</th>
+                    <th>Annual Used</th>
+                    <th>Annual Balance</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for b in balance_data %}
+                <tr>
+                    <td>
+                        {% if b.employee.photo %}
+                        <img src="{{ b.employee.photo.url }}" style="width:28px;height:28px;border-radius:50%;object-fit:cover;margin-right:6px;vertical-align:middle;">
+                        {% else %}
+                        <span class="avatar">{{ b.employee.name|first|upper }}</span>
+                        {% endif %}
+                        {{ b.employee.name }}
+                    </td>
+                    <td><span class="badge badge-dept">{{ b.employee.department }}</span></td>
+                    <td><span class="badge" style="background:#2e1212;color:#e24b4a;">{{ b.sick_used }}</span></td>
+                    <td><span class="badge" style="background:#0f2e26;color:#5dcaa5;">{{ b.sick_balance }}</span></td>
+                    <td><span class="badge" style="background:#2e1212;color:#e24b4a;">{{ b.casual_used }}</span></td>
+                    <td><span class="badge" style="background:#0f2e26;color:#5dcaa5;">{{ b.casual_balance }}</span></td>
+                    <td><span class="badge" style="background:#2e1212;color:#e24b4a;">{{ b.annual_used }}</span></td>
+                    <td><span class="badge" style="background:#0f2e26;color:#5dcaa5;">{{ b.annual_balance }}</span></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,51 @@
+﻿{% extends "employees/base.html" %}
+{% block page_title %}Apply Leave{% endblock %}
+{% block content %}
+<div class="form-card">
+    <div class="card">
+        <div class="card-header">📋 Apply Leave</div>
+        <div class="card-body">
+            <form method="POST">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label>Employee</label>
+                    <select name="employee" required>
+                        <option value="">-- Select Employee --</option>
+                        {% for e in employees %}
+                        <option value="{{ e.id }}">{{ e.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Leave Type</label>
+                    <select name="leave_type" required>
+                        <option value="Sick Leave">Sick Leave</option>
+                        <option value="Casual Leave">Casual Leave</option>
+                        <option value="Annual Leave">Annual Leave</option>
+                        <option value="Maternity Leave">Maternity Leave</option>
+                        <option value="Emergency Leave">Emergency Leave</option>
+                    </select>
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+                    <div class="form-group">
+                        <label>From Date</label>
+                        <input type="date" name="from_date" required>
+                    </div>
+                    <div class="form-group">
+                        <label>To Date</label>
+                        <input type="date" name="to_date" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Reason</label>
+                    <textarea name="reason" rows="3" required style="width:100%;padding:10px 14px;border:1.5px solid #2d2640;border-radius:8px;font-size:13px;color:#e2dff8;background:#211d2e;outline:none;font-family:Segoe UI,sans-serif;resize:vertical;"></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Submit Leave</button>
+                    <a href="{% url 'leave_list' %}" class="btn btn-light">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,130 @@
+{% extends 'employees/base.html' %}
+{% block page_title %}Employees{% endblock %}
+
+{% block content %}
+
+<div class="stats-grid">
+    <div class="stat-card blue">
+        <div class="stat-info">
+            <label>Total Employees</label>
+            <h3>{{ employees.count }}</h3>
+        </div>
+        <div class="stat-icon blue">👥</div>
+    </div>
+    <div class="stat-card green">
+        <div class="stat-info">
+            <label>Active</label>
+            <h3>{{ employees.count }}</h3>
+        </div>
+        <div class="stat-icon green">✅</div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        Employee List
+        <a href="{% url 'add_employee' %}" class="btn btn-primary">+ Add Employee</a>
+    </div>
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Photo</th>
+                    <th>Emp ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Department</th>
+                    <th>Phone</th>
+                    <th>Salary</th>
+                    <th>Joining Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for employee in employees %}
+                <tr>
+                    <td>
+                        {% if employee.photo %}
+                            <img src="{{ employee.photo.url }}"
+                                 style="width:40px;height:40px;border-radius:50%;object-fit:cover;border:2px solid #eef0fd;">
+                        {% else %}
+                            <span class="avatar">{{ employee.name|first|upper }}</span>
+                        {% endif %}
+                    </td>
+                    <td><span class="badge badge-id">{{ employee.Emp_id }}</span></td>
+                    <td>{{ employee.name }}</td>
+                    <td>{{ employee.email }}</td>
+                    <td><span class="badge badge-dept">{{ employee.department }}</span></td>
+                    <td>{{ employee.phone }}</td>
+                    <td>Rs.{{ employee.salary }}</td>
+                    <td>{{ employee.joining_date }}</td>
+                    <td>
+                        <a href="{% url 'update_employee' employee.Emp_id %}" class="btn-icon btn-edit" title="Edit">✏️</a>
+                        <a href="{% url 'delete_employee' employee.Emp_id %}" class="btn-icon btn-del" title="Delete">🗑️</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="9">
+                        <div class="empty-state">
+                            <div class="empty-icon">📭</div>
+                            <p>No employees found</p>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <!-- <table border="1">
+    <tr>
+        <th>Emp_id</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Department</th>
+        <th>Salary</th>
+        <th>Action</th>
+    </tr>
+
+    {% for employee in employees %}
+    <tr>
+        <td>{{ employee.Emp_id }}</td>
+        <td>{{ employee.name }}</td>
+        <td>{{ employee.email }}</td>
+        <td>{{ employee.department }}</td>
+        <td>{{ employee.salary }}</td>
+        <td>
+         <a href="{% url 'update_employee' employee.Emp_id %}">Edit</a>
+         <a href="{% url 'delete_employee' employee.Emp_id %}">Delete</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>  -->

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Department</title>
+
+    <style>
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:'Segoe UI',sans-serif;
+        }
+
+        body{
+            background:#f4f6fb;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            min-height:100vh;
+        }
+
+        .container{
+            width:100%;
+            max-width:650px;
+        }
+
+        .card{
+            background:white;
+            border-radius:20px;
+            padding:35px;
+            box-shadow:0 10px 30px rgba(0,0,0,.1);
+        }
+
+        .title{
+            text-align:center;
+            margin-bottom:30px;
+        }
+
+        .title h1{
+            color:#111827;
+            font-size:28px;
+        }
+
+        .title p{
+            color:#6b7280;
+            margin-top:8px;
+        }
+
+        .form-group{
+            margin-bottom:18px;
+        }
+
+        label{
+            display:block;
+            margin-bottom:8px;
+            font-weight:600;
+            color:#374151;
+        }
+
+        input{
+            width:100%;
+            padding:14px;
+            border:1px solid #d1d5db;
+            border-radius:10px;
+            font-size:15px;
+            transition:.3s;
+        }
+
+        input:focus{
+            outline:none;
+            border-color:#4f46e5;
+            box-shadow:0 0 0 4px rgba(79,70,229,.15);
+        }
+
+        .btn{
+            width:100%;
+            background:linear-gradient(135deg,#4f46e5,#6366f1);
+            color:white;
+            border:none;
+            padding:15px;
+            border-radius:10px;
+            font-size:16px;
+            font-weight:600;
+            cursor:pointer;
+            transition:.3s;
+        }
+
+        .btn:hover{
+            transform:translateY(-2px);
+        }
+
+        .back-btn{
+            display:inline-block;
+            margin-top:15px;
+            text-decoration:none;
+            color:#4f46e5;
+            font-weight:600;
+        }
+
+        .error{
+            color:red;
+            font-size:13px;
+            margin-top:5px;
+            display:none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <div class="card">
+
+        <div class="title">
+            <h1>🏢 Add Department</h1>
+            <p>Create a new department</p>
+        </div>
+
+        <form method="POST" onsubmit="return validateForm()">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label>Department ID</label>
+                <input type="text" id="dept_id" name="dept_id">
+                <div class="error" id="deptError">
+                    Department ID is required
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Department Name</label>
+                <input type="text" id="dept_name" name="dept_name">
+            </div>
+
+            <div class="form-group">
+                <label>Manager Name</label>
+                <input type="text" id="manager_name" name="manager_name">
+            </div>
+
+            <div class="form-group">
+                <label>Location</label>
+                <input type="text" id="location" name="location">
+            </div>
+
+            <button type="submit" class="btn">
+                Save Department
+            </button>
+
+        </form>
+
+        <a href="{% url 'department_list' %}" class="back-btn">
+            ← Back to Departments
+        </a>
+
+    </div>
+
+</div>
+
+<script>
+
+function validateForm(){
+
+    let deptId = document.getElementById("dept_id").value.trim();
+
+    if(deptId === ""){
+
+        document.getElementById("deptError").style.display="block";
+
+        return false;
+    }
+
+    return true;
+}
+
+</script>
+
+</body>
+</html>
