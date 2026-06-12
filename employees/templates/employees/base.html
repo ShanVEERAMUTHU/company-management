@@ -147,7 +147,99 @@
         .empty-icon { font-size: 40px; margin-bottom: 10px; }
 
         .delete-box { max-width: 400px; margin: 50px auto; text-align: center; }
-        .delete-icon { width: 65px; height: 65px; background: #fff3cd; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 26px; margin: 0 auto 18px; } 
+        .delete-icon { width: 65px; height: 65px; background: #fff3cd; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 26px; margin: 0 auto 18px; }
+
+        /* Mobile Responsive */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        padding: 10px;
+    }
+
+    .sidebar-brand {
+        padding: 10px 14px;
+        border-bottom: none;
+        flex: 1;
+    }
+
+    .sidebar-section { display: none; }
+
+    .sidebar nav {
+        display: flex;
+        flex-wrap: wrap;
+        width: 100%;
+        margin-top: 0;
+        gap: 4px;
+        padding: 6px 10px;
+    }
+
+    .sidebar nav a {
+        padding: 7px 10px;
+        margin: 0;
+        border-left: none;
+        border-radius: 8px;
+        font-size: 12px;
+        flex: 0 0 auto;
+    }
+
+    .sidebar nav a:hover,
+    .sidebar nav a.active {
+        border-left: none;
+    }
+
+    .main {
+        margin-left: 0;
+        padding: 14px;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+
+    .table-wrap { overflow-x: auto; }
+
+    .topbar {
+        border-radius: 8px;
+        padding: 10px 14px;
+    }
+
+    .topbar h4 { font-size: 14px; }
+
+    .form-card { max-width: 100%; }
+
+    .delete-box { margin: 20px auto; }
+}
+
+@media (max-width: 480px) {
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+    
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .sidebar { width: 100%; height: auto; position: relative; display: flex; flex-wrap: wrap; align-items: center; padding: 10px; }
+            .sidebar-brand { padding: 10px 14px; border-bottom: none; flex: 1; }
+            .sidebar-section { display: none; }
+            .sidebar nav { display: flex; flex-wrap: wrap; width: 100%; margin-top: 0; gap: 4px; padding: 6px 10px; }
+            .sidebar nav a { padding: 7px 10px; margin: 0; border-left: none !important; border-radius: 8px; font-size: 12px; flex: 0 0 auto; }
+            .main { margin-left: 0; padding: 14px; }
+            .stats-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+            .topbar { border-radius: 8px; padding: 10px 14px; }
+            .topbar h4 { font-size: 14px; }
+            .form-card { max-width: 100%; }
+            .delete-box { margin: 20px auto; }
+        }
+        @media (max-width: 480px) {
+            .stats-grid { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
 <body>
